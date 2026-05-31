@@ -19,7 +19,7 @@ O **Cocktail Handbook** é um aplicativo móvel desenvolvido em Flutter que func
 - **Detalhes do Drink** — Tela dedicada exibindo ingredientes, história e passo a passo de preparo.
 - **Avaliações com Estrelas** — Registro de nota (1–5 estrelas) e anotação pessoal por drink, persistidos no Firestore.
 - **Minhas Notas** — Listagem de todas as avaliações do usuário logado, com opção de editar ou excluir cada entrada.
-- **Roteamento por autenticação** — `AuthGate` redireciona automaticamente para Login ou Home conforme o estado de autenticação.
+- **Roteamento por autenticação** — `AuthGate` redireciona automaticamente para Login ou Home conforme o estado de autenticação do Firebase.
 
 ---
 
@@ -38,10 +38,10 @@ O **Cocktail Handbook** é um aplicativo móvel desenvolvido em Flutter que func
 
 ## 🛠️ Tecnologias Utilizadas
 
-| Tecnologia | Versão |
+| Tecnologia | Versão Mínima / Utilizada |
 |-----------|--------|
-| Flutter SDK | `^3.11.3` |
-| Dart | — |
+| Flutter SDK | `>=3.27.0` (Ambiente: `3.41.5`) |
+| Dart SDK | `^3.11.3` |
 | firebase_core | `^4.7.0` |
 | firebase_auth | `^6.4.0` |
 | cloud_firestore | `^6.3.0` |
@@ -57,6 +57,7 @@ lib/
 ├── main.dart                     # Ponto de entrada; inicializa o Firebase
 ├── app.dart                      # MaterialApp e configuração de rotas
 ├── auth_gate.dart                # Redireciona para Login ou Home via StreamBuilder
+├── firebase_options.dart          # Configurações de inicialização geradas pelo Firebase CLI
 ├── services/
 │   └── auth_service.dart         # Cadastro e login via FirebaseAuth + Firestore
 └── pages/
@@ -76,25 +77,28 @@ lib/
 ```
 usuarios/
 └── {uid}/
-    ├── nome
-    ├── email
     ├── criadoEm
+    ├── email
+    ├── nome
+    ├── uid
     └── ultimoLoginEm
 
 avaliacoes/
 └── {docId}/
-    ├── uid
+    ├── atualizadoEm
+    ├── criadoEm
     ├── drinkName
     ├── nota          (int 1–5)
-    ├── anotacao      (String)
-    └── criadoEm
+    └── textoAnotacao
+    └── userId
+
 ```
 
 ---
 
 ## 📦 Pré-requisitos e Instalação
 
-Antes de começar, você precisará ter o **Flutter SDK** (`^3.11.3`) instalado.
+Antes de começar, você precisará ter o **Flutter SDK** (`>=3.27.0`) instalado.
 
 ### 1. Clonar o repositório
 
@@ -116,7 +120,13 @@ flutter pub get
 
 ### 4. Configurar o Firebase
 
-O projeto utiliza Firebase Authentication e Cloud Firestore. Certifique-se de que o arquivo `google-services.json` (Android) ou `GoogleService-Info.plist` (iOS) esteja configurado corretamente no projeto antes de executar.
+O projeto utiliza Firebase Authentication e Cloud Firestore. Para que o projeto funcione localmente, certifique-se de que:
+
+O arquivo google-services.json (Android) esteja na pasta android/app/.
+
+O arquivo GoogleService-Info.plist (iOS) esteja configurado corretamente no diretório correspondente, caso execute em ambiente macOS.
+
+O arquivo firebase_options.dart esteja presente na pasta lib/ (gerado através do comando flutterfire configure).
 
 ### 5. Executar o projeto
 
