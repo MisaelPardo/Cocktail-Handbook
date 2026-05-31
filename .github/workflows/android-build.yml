@@ -32,9 +32,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # ETAPA OBRIGATÓRIA: Gera o relatório com o código SHA-1 nos logs
       - name: Get SHA-1 certificate
-        run: cd android && ./gradlew signingReport
+        run: |
+          cd android
+          ./gradlew signingReport
 
       - name: Build APK
         run: flutter build apk --release
