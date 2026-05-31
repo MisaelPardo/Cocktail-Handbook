@@ -33,9 +33,7 @@ jobs:
         run: flutter pub get
 
       - name: Get SHA-1 certificate
-        run: |
-          cd android
-          ./gradlew signingReport
+        run: cd android && ./gradlew signingReport
 
       - name: Build APK
         run: flutter build apk --release
