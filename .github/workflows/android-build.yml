@@ -32,12 +32,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # CORREÇÃO: Dá permissão de execução ao gradlew e roda o relatório
+      # CORREÇÃO: Executa o relatório usando o shell diretamente no diretório correto
       - name: Get SHA-1 certificate
         run: |
-          chmod +x android/gradlew
           cd android
-          ./gradlew signingReport
+          sh gradlew signingReport
 
       - name: Build APK
         run: flutter build apk --release
