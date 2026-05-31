@@ -1,47 +1,16 @@
-name: Android Build
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-
-      # CORREÇÃO: Força o ambiente do GitHub a usar a versão do Flutter exigida pelo projeto
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.44.0'
-          channel: 'stable'
-          cache: true
-
-      - name: Install dependencies
+- name: Install dependencies
         run: flutter pub get
 
+      # Primeiro compila o APK (Isso gera o arquivo de keystore que estava faltando)
+      - name: Build APK
+        run: flutter build apk --release
+
+      # Depois lê o certificado SHA-1
       - name: Get SHA-1 certificate
         run: |
           chmod +x android/gradlew
           cd android
           ./gradlew signingReport
-
-      - name: Build APK
-        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
